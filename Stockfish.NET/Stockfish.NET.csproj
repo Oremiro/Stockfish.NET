@@ -5,4 +5,9 @@
     <TargetFramework>netcoreapp3.1</TargetFramework>
   </PropertyGroup>
 
+  <ItemGroup>
+    <Folder Include="Stockfish\linux" />
+    <Folder Include="Stockfish\stockfish_12_win_x64_bmi2" />
+  </ItemGroup>
+
 </Project>
