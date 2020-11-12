@@ -6,7 +6,7 @@
 
   <ItemGroup>
     <Folder Include="Stockfish\linux" />
-    <Folder Include="Stockfish\stockfish_12_win_x64_bmi2" />
+    <Folder Include="Stockfish\win\stockfish_12_win_x64" />
   </ItemGroup>
 
 </Project>
