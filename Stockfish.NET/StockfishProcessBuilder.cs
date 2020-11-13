@@ -20,15 +20,21 @@ namespace Stockfish.NET
                 RedirectStandardOutput = true
             };
             _process = new Process {StartInfo = _processStartInfo};
-            _process.OutputDataReceived += (sender, args) => this.DataReceived.Invoke(sender, args);
+            _process.OutputDataReceived += new DataReceivedEventHandler(DataReceived);
+            _process.ErrorDataReceived += new DataReceivedEventHandler(DataReceived);
+
         }
 
-        public event DataReceivedEventHandler DataReceived = (sender, args) => { Console.WriteLine(args.Data); };
+        public event DataReceivedEventHandler DataReceived = (sender, args) =>
+        {
+            Console.WriteLine(args.Data);
+        };
 
         public void Start()
         {
             _process.Start();
             _process.BeginOutputReadLine();
+            _process.BeginErrorReadLine();
         }
 
         public void Wait(int millisecond)
@@ -40,6 +46,11 @@ namespace Stockfish.NET
         {
             _process.StandardInput.WriteLine(command);
             _process.StandardInput.Flush();
+        }
+
+        public void Close()
+        {
+            _process.Close();
         }
     }
 }
