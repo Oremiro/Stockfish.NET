@@ -25,8 +25,7 @@ namespace Stockfish.NET
         {
             _processStartInfo = new ProcessStartInfo
             {
-                FileName =
-                    @"D:\Projects\Stockfish\Stockfish.NET\Stockfish.NET\Stockfish\win\stockfish_12_win_x64\stockfish_20090216_x64.exe",
+                FileName = path,
                 UseShellExecute = false,
                 RedirectStandardError = true,
                 RedirectStandardInput = true,
