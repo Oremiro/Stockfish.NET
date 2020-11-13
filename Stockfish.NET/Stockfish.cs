@@ -38,11 +38,11 @@ namespace Stockfish.NET
                 {
                     throw new StackOverflowException();
                 }
-                var data = _stockfish.ReadLine();
-                var splittedData = data.Split(" ").ToList();
-                if (splittedData[0] == "Fen:")
+
+                var data = readLineAsList();
+                if (data[0] == "Fen:")
                 {
-                    return string.Join(" ", splittedData.GetRange(1, splittedData.Count - 1));
+                    return string.Join(" ", data.GetRange(1, data.Count - 1));
                 }
                 tries++;
             }
@@ -56,6 +56,12 @@ namespace Stockfish.NET
         private void startNewGame()
         {
             
+        }
+
+        private List<string> readLineAsList()
+        {
+            var data = _stockfish.ReadLine();
+            return data.Split(" ").ToList();
         }
         public string GetSkillLevel(int skillLevel = 20)
         {
@@ -76,7 +82,27 @@ namespace Stockfish.NET
 
         public bool IsMoveCorrect(string moveValue)
         {
-            throw new System.NotImplementedException();
+            _stockfish.WriteLine($"go depth 1 searchmoves {moveValue}");
+            var tries = 0;
+            while (true)
+            {
+                if (tries > 100)
+                {
+                    throw new StackOverflowException();
+                }
+                var data = readLineAsList();
+                if (data[0] == "bestmove")
+                {
+                    if (data[1] == "(none)")
+                    {
+                        return false;
+                    }
+
+                    return true;
+                }
+
+                tries++;
+            }
         }
 
         public void GetEvaluation()
