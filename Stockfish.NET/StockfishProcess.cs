@@ -5,7 +5,7 @@ using System.Diagnostics;
 
 namespace Stockfish.NET
 {
-    public class StockfishProcess
+    internal class StockfishProcess
     {
         /// <summary>
         /// Default process info for Stockfish process
