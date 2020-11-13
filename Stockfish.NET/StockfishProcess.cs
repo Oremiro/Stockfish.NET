@@ -49,6 +49,10 @@ namespace Stockfish.NET
         /// <param name="command"></param>
         public void WriteLine(string command)
         {
+            if (_process.StandardInput == null)
+            {
+                throw new NullReferenceException();
+            }
             _process.StandardInput.WriteLine(command);
             _process.StandardInput.Flush();
         }
@@ -59,6 +63,10 @@ namespace Stockfish.NET
         /// <returns></returns>
         public string ReadLine()
         {
+            if (_process.StandardOutput == null)
+            {
+                throw new NullReferenceException();
+            }
             return _process.StandardOutput.ReadLine();
         }
         /// <summary>
