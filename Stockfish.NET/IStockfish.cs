@@ -7,7 +7,7 @@ namespace Stockfish.NET
     {
         int Depth { get; set; }
         int SkillLevel { get; set; }
-        void SetPosition(List<string> moves = null);
+        void SetPosition(params string[] move);
         string GetBoardVisual();
         string GetFenPosition();
         void SetFenPosition(string fenPosition);

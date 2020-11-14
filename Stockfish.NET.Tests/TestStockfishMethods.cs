@@ -49,10 +49,9 @@ namespace Stockfish.NET.Tests
         [Fact(Timeout = 2000)]
         public void TestGetBestMoveNotFirstMove()
         {
-            Stockfish.SetPosition(new List<string>
-            {
+            Stockfish.SetPosition(
                 "e2e4", "e7e6"
-            });
+            );
             var bestMove = Stockfish.GetBestMove();
             Assert.Contains(bestMove, new List<string>
             {
@@ -64,10 +63,9 @@ namespace Stockfish.NET.Tests
         [Fact(Timeout = 2000)]
         public void TestGetBestMoveTimeNotFirstMove()
         {
-            Stockfish.SetPosition(new List<string>
-            {
+            Stockfish.SetPosition(
                 "e2e4", "e7e6"
-            });
+            );
             var bestMove = Stockfish.GetBestMoveTime();
             Assert.Contains(bestMove, new List<string>
             {
@@ -78,10 +76,9 @@ namespace Stockfish.NET.Tests
         [Fact(Timeout = 2000)]
         public void TestGetBestMoveMate()
         {
-            Stockfish.SetPosition(new List<string>
-            {
+            Stockfish.SetPosition(
                 "f2f3", "e7e5", "g2g4", "d8h4"
-            });
+            );
             var bestMove = Stockfish.GetBestMove();
             Assert.Null(bestMove);
         }
@@ -99,10 +96,7 @@ namespace Stockfish.NET.Tests
         [Fact(Timeout = 2000)]
         public void TestGetBoardVisual()
         {
-            Stockfish.SetPosition(new List<string>
-            {
-                "e2e4", "e7e6", "d2d4", "d7d5"
-            });
+            Stockfish.SetPosition("e2e4", "e7e6", "d2d4", "d7d5");
             var expected = " +---+---+---+---+---+---+---+---+\n" +
                            " | r | n | b | q | k | b | n | r | 8\n" +
                            " +---+---+---+---+---+---+---+---+\n" +
@@ -135,10 +129,9 @@ namespace Stockfish.NET.Tests
         [Fact(Timeout = 2000)]
         public void TestGetFenPositionAfterMoves()
         {
-            Stockfish.SetPosition(new List<string>
-            {
+            Stockfish.SetPosition(
                 "e2e4", "e7e6"
-            });
+            );
             var fen = "rnbqkbnr/pppp1ppp/4p3/8/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2";
             var fenPosition = Stockfish.GetFenPosition();
             Assert.Equal(fen, fenPosition);

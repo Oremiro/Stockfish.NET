@@ -10,23 +10,37 @@ namespace Stockfish.NET
     public class Stockfish : IStockfish
     {
         #region private variables
-
+        /// <summary>
+        /// 
+        /// </summary>
         private const int MAX_TRIES = 200;
+        /// <summary>
+        /// 
+        /// </summary>
         private int _skillLevel;
 
         #endregion
 
         # region private properties
-
+        /// <summary>
+        /// 
+        /// </summary>
         private StockfishProcess _stockfish { get; set; }
 
         #endregion
 
         #region public properties
-
+        /// <summary>
+        /// 
+        /// </summary>
         public Settings Settings { get; set; }
+        /// <summary>
+        /// 
+        /// </summary>
         public int Depth { get; set; }
-
+        /// <summary>
+        /// 
+        /// </summary>
         public int SkillLevel
         {
             get => _skillLevel;
@@ -41,7 +55,12 @@ namespace Stockfish.NET
         #endregion
 
         # region constructor
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="path"></param>
+        /// <param name="depth"></param>
+        /// <param name="settings"></param>
         public Stockfish(
             string path =
                 @"D:\Projects\Stockfish\Stockfish.NET\Stockfish.NET\Stockfish\win\stockfish_12_win_x64\stockfish_20090216_x64.exe",
@@ -74,13 +93,21 @@ namespace Stockfish.NET
         #endregion
 
         #region private
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="command"></param>
+        /// <param name="estimatedTime"></param>
         private void send(string command, int estimatedTime = 100)
         {
             _stockfish.WriteLine(command);
             _stockfish.Wait(estimatedTime);
         }
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        /// <exception cref="MaxTriesException"></exception>
         private bool isReady()
         {
             send("isready");
@@ -101,7 +128,12 @@ namespace Stockfish.NET
                 return false;
             }
         }
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="name"></param>
+        /// <param name="value"></param>
+        /// <exception cref="ApplicationException"></exception>
         private void setOption(string name, string value)
         {
             send($"setoption name {name} value {value}");
@@ -110,12 +142,19 @@ namespace Stockfish.NET
                 throw new ApplicationException();
             }
         }
-
-        private string movesToString(List<string> moves)
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="moves"></param>
+        /// <returns></returns>
+        private string movesToString(string[] moves)
         {
             return string.Join(" ", moves);
         }
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <exception cref="ApplicationException"></exception>
         private void startNewGame()
         {
             send("ucinewgame");
@@ -124,17 +163,25 @@ namespace Stockfish.NET
                 throw new ApplicationException();
             }
         }
-
+        /// <summary>
+        /// 
+        /// </summary>
         private void go()
         {
             send($"go depth {Depth}");
         }
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="time"></param>
         private void goTime(int time)
         {
             send($"go movetime {time}", estimatedTime: time + 100);
         }
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
         private List<string> readLineAsList()
         {
             var data = _stockfish.ReadLine();
@@ -144,18 +191,20 @@ namespace Stockfish.NET
         #endregion
 
         #region public
-
-        public void SetPosition(List<string> moves = null)
+        /// <summary>
+        /// Setup current position
+        /// </summary>
+        /// <param name="moves"></param>
+        public void SetPosition(params string[] moves)
         {
             startNewGame();
-            if (moves == null)
-            {
-                moves = new List<string>();
-            }
-
             send($"position startpos moves {movesToString(moves)}");
         }
-
+        /// <summary>
+        /// Get visualisation of current position
+        /// </summary>
+        /// <returns></returns>
+        /// <exception cref="MaxTriesException"></exception>
         public string GetBoardVisual()
         {
             send("d");
@@ -180,7 +229,11 @@ namespace Stockfish.NET
 
             return board;
         }
-
+        /// <summary>
+        /// Get position in fen format
+        /// </summary>
+        /// <returns></returns>
+        /// <exception cref="MaxTriesException"></exception>
         public string GetFenPosition()
         {
             send("d");
@@ -201,13 +254,20 @@ namespace Stockfish.NET
                 tries++;
             }
         }
-
+        /// <summary>
+        /// Set position in fen format
+        /// </summary>
+        /// <param name="fenPosition"></param>
         public void SetFenPosition(string fenPosition)
         {
             startNewGame();
             send($"position fen {fenPosition}");
         }
-
+        /// <summary>
+        /// Getting best move of current position
+        /// </summary>
+        /// <returns></returns>
+        /// <exception cref="MaxTriesException"></exception>
         public string GetBestMove()
         {
             go();
@@ -234,7 +294,12 @@ namespace Stockfish.NET
                 tries++;
             }
         }
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="time"></param>
+        /// <returns></returns>
+        /// <exception cref="MaxTriesException"></exception>
         public string GetBestMoveTime(int time = 1000)
         {
             goTime(time);
@@ -257,7 +322,12 @@ namespace Stockfish.NET
                 }
             }
         }
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="moveValue"></param>
+        /// <returns></returns>
+        /// <exception cref="MaxTriesException"></exception>
         public bool IsMoveCorrect(string moveValue)
         {
             send($"go depth 1 searchmoves {moveValue}");
@@ -284,6 +354,11 @@ namespace Stockfish.NET
             }
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        /// <exception cref="MaxTriesException"></exception>
         public Evaluation GetEvaluation()
         {
             Evaluation evaluation = new Evaluation();
