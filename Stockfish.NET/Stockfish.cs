@@ -35,7 +35,7 @@ namespace Stockfish.NET
         #region private variables
 
         private const int MAX_TRIES = 1000;
-
+        private int _skillLevel;
         #endregion
 
         # region private properties
@@ -51,10 +51,10 @@ namespace Stockfish.NET
 
         public int SkillLevel
         {
-            get => SkillLevel;
+            get => _skillLevel;
             set
             {
-                SkillLevel = value;
+                _skillLevel = value;
                 Settings.SkillLevel = SkillLevel;
                 setOption("Skill level", SkillLevel.ToString());
             }
@@ -84,7 +84,7 @@ namespace Stockfish.NET
                 Settings = settings;
             }
 
-//            SkillLevel = _settings.SkillLevel;
+            SkillLevel = Settings.SkillLevel;
             foreach (var property in Settings.GetPropertiesAsDictionary())
             {
                 setOption(property.Key, property.Value);
