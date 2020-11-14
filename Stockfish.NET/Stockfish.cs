@@ -1,30 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Stockfish.NET.Models;
 
 namespace Stockfish.NET
 {
-    public enum Color
-    {
-        Black,
-        White
-    }
-
-    public class Evaluation
-    {
-        public string Type { get; set; }
-        public int Value { get; set; }
-
-        public Evaluation()
-        {
-        }
-
-        public Evaluation(string type, int value)
-        {
-            Type = type;
-            Value = value;
-        }
-    }
 
     public class Stockfish : IStockfish
     {

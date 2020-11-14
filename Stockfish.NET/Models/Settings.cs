@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Stockfish.NET
+namespace Stockfish.NET.Models
 {
     public class Settings
     {
