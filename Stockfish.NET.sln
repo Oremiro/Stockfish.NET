@@ -7,8 +7,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Stockfish.NET", "Stockfish.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Stockfish.NET.Tests", "Stockfish.NET.Tests\Stockfish.NET.Tests.csproj", "{F4016D82-258D-4123-BBB5-4827FFDDD96A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StockfishPlayground", "StockfishPlayground\StockfishPlayground.csproj", "{F98AEFA2-7628-4F64-8E86-0CDA88ECF547}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -23,10 +21,6 @@ Global
 		{F4016D82-258D-4123-BBB5-4827FFDDD96A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F4016D82-258D-4123-BBB5-4827FFDDD96A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F4016D82-258D-4123-BBB5-4827FFDDD96A}.Release|Any CPU.Build.0 = Release|Any CPU
-		{F98AEFA2-7628-4F64-8E86-0CDA88ECF547}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{F98AEFA2-7628-4F64-8E86-0CDA88ECF547}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{F98AEFA2-7628-4F64-8E86-0CDA88ECF547}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{F98AEFA2-7628-4F64-8E86-0CDA88ECF547}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
