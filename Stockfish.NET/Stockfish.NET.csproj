@@ -5,7 +5,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Stockfish\win\stockfish_12_win_x32" />
     <Folder Include="Stockfish\win\stockfish_12_win_x64" />
   </ItemGroup>
 
