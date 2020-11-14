@@ -9,13 +9,13 @@ namespace Stockfish.NET
         void SetPosition(List<string> moves = null);
         string GetBoardVisual();
         string GetFenPosition();
-        string GetSkillLevel(int skillLevel = 20);
         void SetFenPosition(string fenPosition);
+        
+        string SetSkillLevel(int skillLevel = 20);
         void GetBestMove();
         void GetBestMoveTime(int time = 1000);
         bool IsMoveCorrect(string moveValue);
-        void GetEvaluation();
-        void SetDepth();
+        Evaluation GetEvaluation();
         # endregion
     }
 }

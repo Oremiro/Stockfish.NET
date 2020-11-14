@@ -2,15 +2,60 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Security.Permissions;
 using System.Threading.Tasks;
 
 namespace Stockfish.NET
 {
+    public enum Color
+    {
+        Black,
+        White
+    }
+
+    public class Evaluation
+    {
+        public string Type { get; set; }
+        public int Value { get; set; }
+
+        public Evaluation()
+        {
+        }
+
+        public Evaluation(string type, int value)
+        {
+            Type = type;
+            Value = value;
+        }
+    }
+
     public class Stockfish : IStockfishClient
     {
+        #region private variables
+
+        private const int MAX_TRIES = 1000;
+
+        #endregion
+
         # region private properties
 
         private StockfishProcess _stockfish { get; set; }
+
+        #endregion
+
+        #region public properties
+
+        public int Depth { get; set; }
+
+        public int SkillLevel
+        {
+            get => SkillLevel;
+            set
+            {
+                SkillLevel = value;
+                setOption("Skill level", SkillLevel);
+            }
+        }
 
         #endregion
 
@@ -18,8 +63,10 @@ namespace Stockfish.NET
 
         public Stockfish(
             string path =
-                @"D:\Projects\Stockfish\Stockfish.NET\Stockfish.NET\Stockfish\win\stockfish_12_win_x64\stockfish_20090216_x64.exe")
+                @"D:\Projects\Stockfish\Stockfish.NET\Stockfish.NET\Stockfish\win\stockfish_12_win_x64\stockfish_20090216_x64.exe",
+            int depth = 2)
         {
+            Depth = depth;
             _stockfish = new StockfishProcess(path);
             _stockfish.Start();
         }
@@ -34,13 +81,22 @@ namespace Stockfish.NET
             _stockfish.Wait(estimatedTime);
         }
 
+        private void setOption(string name, int value)
+        {
+            send($"setoption name {name} value {value}");
+            if (!isReady())
+            {
+                throw new ApplicationException();
+            }
+        }
+
         private bool isReady()
         {
             send("isready");
             var tries = 0;
             while (true)
             {
-                if (tries > 100)
+                if (tries > MAX_TRIES)
                 {
                     throw new StackOverflowException();
                 }
@@ -57,7 +113,12 @@ namespace Stockfish.NET
         private void startNewGame()
         {
             send("ucinewgame");
+            if (!isReady())
+            {
+                throw new ApplicationException();
+            }
         }
+
 
         private List<string> readLineAsList()
         {
@@ -85,7 +146,7 @@ namespace Stockfish.NET
             var tries = 0;
             while (true)
             {
-                if (tries > 100)
+                if (tries > MAX_TRIES)
                 {
                     throw new StackOverflowException();
                 }
@@ -106,7 +167,7 @@ namespace Stockfish.NET
             send($"position fen {fenPosition}");
         }
 
-        public string GetSkillLevel(int skillLevel = 20)
+        public string SetSkillLevel(int skillLevel = 20)
         {
             throw new System.NotImplementedException();
         }
@@ -128,7 +189,7 @@ namespace Stockfish.NET
             var tries = 0;
             while (true)
             {
-                if (tries > 100)
+                if (tries > MAX_TRIES)
                 {
                     throw new StackOverflowException();
                 }
@@ -148,14 +209,56 @@ namespace Stockfish.NET
             }
         }
 
-        public void GetEvaluation()
+        public Evaluation GetEvaluation()
         {
-            throw new System.NotImplementedException();
-        }
+            Evaluation evaluation = new Evaluation();
+            var fen = GetFenPosition();
+            Color compare;
+            //fen sequence for white always contains w
+            if (fen.Contains("w"))
+            {
+                compare = Color.White;
+            }
+            else
+            {
+                compare = Color.Black;
+            }
 
-        public void SetDepth()
-        {
-            throw new System.NotImplementedException();
+            send($"position {fen}\n go");
+            var tries = 0;
+            while (true)
+            {
+                if (tries > MAX_TRIES)
+                {
+                    throw new StackOverflowException();
+                }
+
+                var data = readLineAsList();
+                if (data[0] == "info")
+                {
+                    for (int i = 0; i < data.Count; i++)
+                    {
+                        if (data[i] == "score")
+                        {
+                            //don't use ternary operator here for readability
+                            int k;
+                            if (compare == Color.White)
+                            {
+                                k = 1;
+                            }
+                            else
+                            {
+                                k = -1;
+                            }
+                            evaluation = new Evaluation(data[i + 1], Convert.ToInt32(data[i + 2]) * k);
+                        }
+                    }
+                }
+                else if (data[0] == "bestmove")
+                {
+                    return evaluation;
+                }
+            }
         }
 
         #endregion
