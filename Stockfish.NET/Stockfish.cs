@@ -384,7 +384,7 @@ namespace Stockfish.NET
                     throw new MaxTriesException();
                 }
 
-                var data = readLineAsList()
+                var data = readLineAsList();
                 if (data[0] == "info")
                 {
                     for (int i = 0; i < data.Count; i++)
