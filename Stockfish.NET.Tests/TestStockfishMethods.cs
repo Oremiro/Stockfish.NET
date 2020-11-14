@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using Stockfish.NET.Models;
 using Xunit;
 using Xunit.Abstractions;
@@ -76,6 +77,7 @@ namespace Stockfish.NET.Tests
         [Fact(Timeout = 2000)]
         public void TestGetBestMoveMate()
         {
+            _testOutputHelper.WriteLine(Directory.GetCurrentDirectory());
             Stockfish.SetPosition(
                 "f2f3", "e7e5", "g2g4", "d8h4"
             );

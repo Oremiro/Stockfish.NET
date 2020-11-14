@@ -7,14 +7,15 @@ using Stockfish.NET.Models;
 
 namespace Stockfish.NET
 {
-
     public class Stockfish : IStockfish
     {
         #region private variables
+
         /// <summary>
         /// 
         /// </summary>
         private const int MAX_TRIES = 200;
+
         /// <summary>
         /// 
         /// </summary>
@@ -23,6 +24,7 @@ namespace Stockfish.NET
         #endregion
 
         # region private properties
+
         /// <summary>
         /// 
         /// </summary>
@@ -31,14 +33,17 @@ namespace Stockfish.NET
         #endregion
 
         #region public properties
+
         /// <summary>
         /// 
         /// </summary>
         public Settings Settings { get; set; }
+
         /// <summary>
         /// 
         /// </summary>
         public int Depth { get; set; }
+
         /// <summary>
         /// 
         /// </summary>
@@ -56,6 +61,7 @@ namespace Stockfish.NET
         #endregion
 
         # region constructor
+
         /// <summary>
         /// 
         /// </summary>
@@ -64,15 +70,25 @@ namespace Stockfish.NET
         /// <param name="settings"></param>
         public Stockfish(
             string path =
-                @"default",
+                "default",
             int depth = 2,
             Settings settings = null)
         {
             if (path == "default")
             {
-                var dir = Directory.GetCurrentDirectory();
-                path = $@"{dir}\Stockfish\win\stockfish_12_win_x64\stockfish_20090216_x64.exe"
+                //.\netcoreapp
+                //.\Debug
+                //.\bin
+                //.\Stockfish.NET.Tests
+                // looks very ugly? should be changed?
+                
+                var dir = Directory.GetParent(Directory
+                    .GetParent(Directory.GetParent(Directory.GetParent(Directory.GetCurrentDirectory()).ToString())
+                        .ToString()).ToString());
+                Console.WriteLine(dir);
+                path = $@"{dir}\Stockfish.NET\Stockfish\win\stockfish_12_win_x64\stockfish_20090216_x64.exe";
             }
+
             Depth = depth;
             _stockfish = new StockfishProcess(path);
             _stockfish.Start();
@@ -99,6 +115,7 @@ namespace Stockfish.NET
         #endregion
 
         #region private
+
         /// <summary>
         /// 
         /// </summary>
@@ -109,6 +126,7 @@ namespace Stockfish.NET
             _stockfish.WriteLine(command);
             _stockfish.Wait(estimatedTime);
         }
+
         /// <summary>
         /// 
         /// </summary>
@@ -134,6 +152,7 @@ namespace Stockfish.NET
                 return false;
             }
         }
+
         /// <summary>
         /// 
         /// </summary>
@@ -148,6 +167,7 @@ namespace Stockfish.NET
                 throw new ApplicationException();
             }
         }
+
         /// <summary>
         /// 
         /// </summary>
@@ -157,6 +177,7 @@ namespace Stockfish.NET
         {
             return string.Join(" ", moves);
         }
+
         /// <summary>
         /// 
         /// </summary>
@@ -169,6 +190,7 @@ namespace Stockfish.NET
                 throw new ApplicationException();
             }
         }
+
         /// <summary>
         /// 
         /// </summary>
@@ -176,6 +198,7 @@ namespace Stockfish.NET
         {
             send($"go depth {Depth}");
         }
+
         /// <summary>
         /// 
         /// </summary>
@@ -184,6 +207,7 @@ namespace Stockfish.NET
         {
             send($"go movetime {time}", estimatedTime: time + 100);
         }
+
         /// <summary>
         /// 
         /// </summary>
@@ -197,6 +221,7 @@ namespace Stockfish.NET
         #endregion
 
         #region public
+
         /// <summary>
         /// Setup current position
         /// </summary>
@@ -206,6 +231,7 @@ namespace Stockfish.NET
             startNewGame();
             send($"position startpos moves {movesToString(moves)}");
         }
+
         /// <summary>
         /// Get visualisation of current position
         /// </summary>
@@ -223,6 +249,7 @@ namespace Stockfish.NET
                 {
                     throw new MaxTriesException();
                 }
+
                 var data = _stockfish.ReadLine();
                 if (data.Contains("+") || data.Contains("|"))
                 {
@@ -235,6 +262,7 @@ namespace Stockfish.NET
 
             return board;
         }
+
         /// <summary>
         /// Get position in fen format
         /// </summary>
@@ -260,6 +288,7 @@ namespace Stockfish.NET
                 tries++;
             }
         }
+
         /// <summary>
         /// Set position in fen format
         /// </summary>
@@ -269,6 +298,7 @@ namespace Stockfish.NET
             startNewGame();
             send($"position fen {fenPosition}");
         }
+
         /// <summary>
         /// Getting best move of current position
         /// </summary>
@@ -300,6 +330,7 @@ namespace Stockfish.NET
                 tries++;
             }
         }
+
         /// <summary>
         /// 
         /// </summary>
@@ -316,6 +347,7 @@ namespace Stockfish.NET
                 {
                     throw new MaxTriesException();
                 }
+
                 var data = readLineAsList();
                 if (data[0] == "bestmove")
                 {
@@ -328,6 +360,7 @@ namespace Stockfish.NET
                 }
             }
         }
+
         /// <summary>
         /// 
         /// </summary>
@@ -379,6 +412,7 @@ namespace Stockfish.NET
             {
                 compare = Color.Black;
             }
+
             // I'm not sure this is the good way to handle evaluation of position, but why not?
             // Another way we need to somehow limit engine depth? 
             goTime(10000);
@@ -412,6 +446,7 @@ namespace Stockfish.NET
                         }
                     }
                 }
+
                 if (data[0] == "bestmove")
                 {
                     return evaluation;
