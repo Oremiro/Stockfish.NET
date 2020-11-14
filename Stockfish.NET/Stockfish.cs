@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using Stockfish.NET.Exceptions;
 using Stockfish.NET.Models;
@@ -63,10 +64,15 @@ namespace Stockfish.NET
         /// <param name="settings"></param>
         public Stockfish(
             string path =
-                @"D:\Projects\Stockfish\Stockfish.NET\Stockfish.NET\Stockfish\win\stockfish_12_win_x64\stockfish_20090216_x64.exe",
+                @"default",
             int depth = 2,
             Settings settings = null)
         {
+            if (path == "default")
+            {
+                var dir = Directory.GetCurrentDirectory();
+                path = $@"{dir}\Stockfish\win\stockfish_12_win_x64\stockfish_20090216_x64.exe"
+            }
             Depth = depth;
             _stockfish = new StockfishProcess(path);
             _stockfish.Start();
