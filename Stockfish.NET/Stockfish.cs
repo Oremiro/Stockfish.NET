@@ -32,16 +32,17 @@ namespace Stockfish.NET
 
         private const int MAX_TRIES = 1000;
         private int _skillLevel;
+
         #endregion
 
         # region private properties
 
         private StockfishProcess _stockfish { get; set; }
-       
 
         #endregion
 
         #region public properties
+
         public Settings Settings { get; set; }
         public int Depth { get; set; }
 
@@ -129,6 +130,11 @@ namespace Stockfish.NET
             }
         }
 
+        private string movesToString(List<string> moves)
+        {
+            return string.Join(" ", moves);
+        }
+
         private void startNewGame()
         {
             send("ucinewgame");
@@ -145,7 +151,7 @@ namespace Stockfish.NET
 
         private void goTime(int time)
         {
-            send($"go movetime {time}");
+            send($"go movetime {time}", estimatedTime: time + 100);
         }
 
         private List<string> readLineAsList()
@@ -160,12 +166,38 @@ namespace Stockfish.NET
 
         public void SetPosition(List<string> moves = null)
         {
-            throw new System.NotImplementedException();
+            startNewGame();
+            if (moves == null)
+            {
+                moves = new List<string>();
+            }
+
+            send($"position startpos moves {movesToString(moves)}");
         }
 
         public string GetBoardVisual()
         {
-            throw new System.NotImplementedException();
+            send("d");
+            var board = "";
+            var lines = 0;
+            var tries = 0;
+            while (lines < 17)
+            {
+                if (tries > MAX_TRIES)
+                {
+                    throw new StackOverflowException();
+                }
+                var data = _stockfish.ReadLine();
+                if (data.Contains("+") || data.Contains("|"))
+                {
+                    lines++;
+                    board += data;
+                }
+
+                tries++;
+            }
+
+            return board;
         }
 
         public string GetFenPosition()
@@ -217,13 +249,32 @@ namespace Stockfish.NET
 
                     return data[1];
                 }
+
                 tries++;
             }
         }
 
         public string GetBestMoveTime(int time = 1000)
         {
-            throw new System.NotImplementedException();
+            goTime(time);
+            var tries = 0;
+            while (true)
+            {
+                if (tries > MAX_TRIES)
+                {
+                    throw new StackOverflowException();
+                }
+                var data = readLineAsList();
+                if (data[0] == "bestmove")
+                {
+                    if (data[1] == "(none)")
+                    {
+                        return null;
+                    }
+
+                    return data[1];
+                }
+            }
         }
 
         public bool IsMoveCorrect(string moveValue)
