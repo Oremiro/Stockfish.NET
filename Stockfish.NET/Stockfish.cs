@@ -1,10 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
-using System.Reflection;
-using System.Security.Permissions;
-using System.Threading.Tasks;
 
 namespace Stockfish.NET
 {
@@ -41,12 +37,12 @@ namespace Stockfish.NET
         # region private properties
 
         private StockfishProcess _stockfish { get; set; }
-        public Settings Settings { get; set; }
+       
 
         #endregion
 
         #region public properties
-
+        public Settings Settings { get; set; }
         public int Depth { get; set; }
 
         public int SkillLevel
