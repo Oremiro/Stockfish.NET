@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Reflection;
 using System.Security.Permissions;
 using System.Threading.Tasks;
 
@@ -29,7 +30,7 @@ namespace Stockfish.NET
         }
     }
 
-    public class Stockfish : IStockfishClient
+    public class Stockfish : IStockfish
     {
         #region private variables
 
@@ -40,6 +41,7 @@ namespace Stockfish.NET
         # region private properties
 
         private StockfishProcess _stockfish { get; set; }
+        public Settings Settings { get; set; }
 
         #endregion
 
@@ -53,7 +55,8 @@ namespace Stockfish.NET
             set
             {
                 SkillLevel = value;
-                setOption("Skill level", SkillLevel);
+                Settings.SkillLevel = SkillLevel;
+                setOption("Skill level", SkillLevel.ToString());
             }
         }
 
@@ -64,18 +67,37 @@ namespace Stockfish.NET
         public Stockfish(
             string path =
                 @"D:\Projects\Stockfish\Stockfish.NET\Stockfish.NET\Stockfish\win\stockfish_12_win_x64\stockfish_20090216_x64.exe",
-            int depth = 2)
+            int depth = 2,
+            Settings settings = null)
         {
             Depth = depth;
             _stockfish = new StockfishProcess(path);
             _stockfish.Start();
+            _stockfish.ReadLine();
+
+            if (settings == null)
+            {
+                Settings = new Settings();
+            }
+            else
+            {
+                Settings = settings;
+            }
+
+//            SkillLevel = _settings.SkillLevel;
+            foreach (var property in Settings.GetPropertiesAsDictionary())
+            {
+                setOption(property.Key, property.Value);
+            }
+
+            startNewGame();
         }
 
         #endregion
 
         #region private
 
-        private void send(string command, int estimatedTime = 50)
+        private void send(string command, int estimatedTime = 100)
         {
             _stockfish.WriteLine(command);
             _stockfish.Wait(estimatedTime);
@@ -92,7 +114,8 @@ namespace Stockfish.NET
                     throw new StackOverflowException();
                 }
 
-                if (_stockfish.ReadLine() == "readyok")
+                var data = _stockfish.ReadLine();
+                if (data == "readyok")
                 {
                     return true;
                 }
@@ -100,8 +123,8 @@ namespace Stockfish.NET
                 return false;
             }
         }
-        
-        private void setOption(string name, int value)
+
+        private void setOption(string name, string value)
         {
             send($"setoption name {name} value {value}");
             if (!isReady())
@@ -176,12 +199,33 @@ namespace Stockfish.NET
             send($"position fen {fenPosition}");
         }
 
-        public void GetBestMove()
+        public string GetBestMove()
         {
-            throw new System.NotImplementedException();
+            go();
+            var tries = 0;
+            while (true)
+            {
+                if (tries > MAX_TRIES)
+                {
+                    throw new StackOverflowException();
+                }
+
+                var data = readLineAsList();
+
+                if (data[0] == "bestmove")
+                {
+                    if (data[1] == "(none)")
+                    {
+                        return null;
+                    }
+
+                    return data[1];
+                }
+                tries++;
+            }
         }
 
-        public void GetBestMoveTime(int time = 1000)
+        public string GetBestMoveTime(int time = 1000)
         {
             throw new System.NotImplementedException();
         }
@@ -253,6 +297,7 @@ namespace Stockfish.NET
                             {
                                 k = -1;
                             }
+
                             evaluation = new Evaluation(data[i + 1], Convert.ToInt32(data[i + 2]) * k);
                         }
                     }
