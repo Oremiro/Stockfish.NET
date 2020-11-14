@@ -11,7 +11,7 @@ namespace Stockfish.NET
     {
         #region private variables
 
-        private const int MAX_TRIES = 1000;
+        private const int MAX_TRIES = 200;
         private int _skillLevel;
 
         #endregion
@@ -289,7 +289,7 @@ namespace Stockfish.NET
             Evaluation evaluation = new Evaluation();
             var fen = GetFenPosition();
             Color compare;
-            //fen sequence for white always contains w
+            // fen sequence for white always contains w
             if (fen.Contains("w"))
             {
                 compare = Color.White;
@@ -298,8 +298,9 @@ namespace Stockfish.NET
             {
                 compare = Color.Black;
             }
-
-            send($"position {fen}\n go");
+            // I'm not sure this is the good way to handle evaluation of position, but why not?
+            // Another way we need to somehow limit engine depth? 
+            goTime(10000);
             var tries = 0;
             while (true)
             {
@@ -330,7 +331,7 @@ namespace Stockfish.NET
                         }
                     }
                 }
-                else if (data[0] == "bestmove")
+                if (data[0] == "bestmove")
                 {
                     return evaluation;
                 }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Stockfish.NET.Models;
 using Xunit;
 using Xunit.Abstractions;
 using Xunit.Sdk;
@@ -17,7 +18,7 @@ namespace Stockfish.NET.Tests
             Stockfish = new Stockfish(depth: 2);
         }
 
-        [Fact]
+        [Fact(Timeout = 2000)]
         public void TestGetBestMoveFirstMove()
         {
             var bestMove = Stockfish.GetBestMove();
@@ -31,7 +32,7 @@ namespace Stockfish.NET.Tests
             });
         }
 
-        [Fact]
+        [Fact(Timeout = 2000)]
         public void TestGetBestMoveTimeFirstMove()
         {
             var bestMove = Stockfish.GetBestMoveTime();
@@ -45,7 +46,7 @@ namespace Stockfish.NET.Tests
             });
         }
 
-        [Fact]
+        [Fact(Timeout = 2000)]
         public void TestGetBestMoveNotFirstMove()
         {
             Stockfish.SetPosition(new List<string>
@@ -60,7 +61,7 @@ namespace Stockfish.NET.Tests
         }
 
 
-        [Fact]
+        [Fact(Timeout = 2000)]
         public void TestGetBestMoveTimeNotFirstMove()
         {
             Stockfish.SetPosition(new List<string>
@@ -74,7 +75,7 @@ namespace Stockfish.NET.Tests
             });
         }
 
-        [Fact]
+        [Fact(Timeout = 2000)]
         public void TestGetBestMoveMate()
         {
             Stockfish.SetPosition(new List<string>
@@ -85,7 +86,7 @@ namespace Stockfish.NET.Tests
             Assert.Null(bestMove);
         }
 
-        [Fact]
+        [Fact(Timeout = 2000)]
         public void TestSetFenPosition()
         {
             Stockfish.SetFenPosition("7r/1pr1kppb/2n1p2p/2NpP2P/5PP1/1P6/P6K/R1R2B2 w - - 1 27");
@@ -95,7 +96,7 @@ namespace Stockfish.NET.Tests
             Assert.False(move2);
         }
 
-        [Fact]
+        [Fact(Timeout = 2000)]
         public void TestGetBoardVisual()
         {
             Stockfish.SetPosition(new List<string>
@@ -121,6 +122,72 @@ namespace Stockfish.NET.Tests
                            " +---+---+---+---+---+---+---+---+\n";
             var board = Stockfish.GetBoardVisual();
             Assert.Equal(expected, board);
+        }
+
+        [Fact(Timeout = 2000)]
+        public void TestGetFenPosition()
+        {
+            var defaultFen = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
+            var fen = Stockfish.GetFenPosition();
+            Assert.Equal(defaultFen, fen);
+        }
+
+        [Fact(Timeout = 2000)]
+        public void TestGetFenPositionAfterMoves()
+        {
+            Stockfish.SetPosition(new List<string>
+            {
+                "e2e4", "e7e6"
+            });
+            var fen = "rnbqkbnr/pppp1ppp/4p3/8/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2";
+            var fenPosition = Stockfish.GetFenPosition();
+            Assert.Equal(fen, fenPosition);
+        }
+
+        [Fact(Timeout = 2000)]
+        public void TestGetEvaluationMate()
+        {
+            var wrongFen = "6k1/p4p1p/6p1/5r2/3b4/6PP/4qP2/5RK1 b - - 14 36";
+            Stockfish.SetFenPosition(wrongFen);
+            var estimatedEvaluation = new Evaluation();
+            estimatedEvaluation.Type = "mate";
+            estimatedEvaluation.Value = -3;
+            var evaluation = Stockfish.GetEvaluation();
+            Assert.True(estimatedEvaluation.Type == evaluation.Type && estimatedEvaluation.Value == evaluation.Value);
+        }
+
+        [Fact(Timeout = 2000)]
+        public void TestGetEvaluationCP()
+        {
+            var wrongFen = "r4rk1/pppb1p1p/2nbpqp1/8/3P4/3QBN2/PPP1BPPP/R4RK1 w - - 0 11";
+            Stockfish.SetFenPosition(wrongFen);
+            var evaluation = Stockfish.GetEvaluation();
+            Assert.True(evaluation.Type == "cp" && evaluation.Value > 0);
+        }
+
+        [Fact(Timeout = 2000)]
+        public void TestGetEvaluationStalemate()
+        {
+            var wrongFen = "1nb1kqn1/pppppppp/8/6r1/5b1K/6r1/8/8 w - - 2 2";
+            Stockfish.SetFenPosition(wrongFen);
+            var estimatedEvaluation = new Evaluation();
+            estimatedEvaluation.Type = "cp";
+            estimatedEvaluation.Value = 0;
+            var evaluation = Stockfish.GetEvaluation();
+            Assert.True(estimatedEvaluation.Type == evaluation.Type && estimatedEvaluation.Value == evaluation.Value);
+        }
+
+        [Fact(Timeout = 2000)]
+        public void TestGetBestMoveWrongPositon()
+        {
+            var wrongFen = "3kk3/8/8/8/8/8/8/3KK3 w - - 0 0";
+            Stockfish.SetFenPosition(wrongFen);
+            var bestMove = Stockfish.GetBestMove();
+            Assert.Contains(bestMove, new List<string>
+            {
+                "d1e2",
+                "d1c1"
+            });
         }
     }
 }
