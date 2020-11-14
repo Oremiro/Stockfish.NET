@@ -6,64 +6,24 @@ namespace Stockfish.NET.Tests
 {
     public class TestStockfishMethods
     {
-        [Fact]
-        void TestSetPosition()
+        private IStockfish Stockfish { get; set; }
+        public TestStockfishMethods()
         {
-            throw new NotImplementedException();
+            Stockfish = new Stockfish(depth: 20);
         }
 
         [Fact]
-        string TestGetBoardVisual()
+        public void TestGetBestMoveFirstMove()
         {
-            throw new NotImplementedException();
-        }
-
-        [Fact]
-        string TestGetFenPosition()
-        {
-            throw new NotImplementedException();
-        }
-
-        [Fact]
-        string TestGetSkillLevel()
-        {
-            throw new NotImplementedException();
-        }
-
-        [Fact]
-        void TestSetFenPosition()
-        {
-            throw new NotImplementedException();
-        }
-
-        [Fact]
-        void TestGetBestMove()
-        {
-            throw new NotImplementedException();
-        }
-
-        [Fact]
-        void TestGetBestMoveTime()
-        {
-            throw new NotImplementedException();
-        }
-
-        [Fact]
-        bool TestIsMoveCorrect()
-        {
-            throw new NotImplementedException();
-        }
-
-        [Fact]
-        void TestGetEvaluation()
-        {
-            throw new NotImplementedException();
-        }
-
-        [Fact]
-        void TestSetDepth()
-        {
-            throw new NotImplementedException();
+            var bestMove = Stockfish.GetBestMove();
+            Assert.Contains(bestMove, new List<string>
+            {
+                "e2e3",
+                "e2e4",
+                "g1f3",
+                "b1c3",
+                "d2d4"
+            });
         }
     }
 }
