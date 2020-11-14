@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Stockfish.NET.Exceptions;
 using Stockfish.NET.Models;
 
 namespace Stockfish.NET
@@ -88,7 +89,7 @@ namespace Stockfish.NET
             {
                 if (tries > MAX_TRIES)
                 {
-                    throw new StackOverflowException();
+                    throw new MaxTriesException();
                 }
 
                 var data = _stockfish.ReadLine();
@@ -165,7 +166,7 @@ namespace Stockfish.NET
             {
                 if (tries > MAX_TRIES)
                 {
-                    throw new StackOverflowException();
+                    throw new MaxTriesException();
                 }
                 var data = _stockfish.ReadLine();
                 if (data.Contains("+") || data.Contains("|"))
@@ -188,7 +189,7 @@ namespace Stockfish.NET
             {
                 if (tries > MAX_TRIES)
                 {
-                    throw new StackOverflowException();
+                    throw new MaxTriesException();
                 }
 
                 var data = readLineAsList();
@@ -215,7 +216,7 @@ namespace Stockfish.NET
             {
                 if (tries > MAX_TRIES)
                 {
-                    throw new StackOverflowException();
+                    throw new MaxTriesException();
                 }
 
                 var data = readLineAsList();
@@ -242,7 +243,7 @@ namespace Stockfish.NET
             {
                 if (tries > MAX_TRIES)
                 {
-                    throw new StackOverflowException();
+                    throw new MaxTriesException();
                 }
                 var data = readLineAsList();
                 if (data[0] == "bestmove")
@@ -265,7 +266,7 @@ namespace Stockfish.NET
             {
                 if (tries > MAX_TRIES)
                 {
-                    throw new StackOverflowException();
+                    throw new MaxTriesException();
                 }
 
                 var data = readLineAsList();
@@ -304,7 +305,7 @@ namespace Stockfish.NET
             {
                 if (tries > MAX_TRIES)
                 {
-                    throw new StackOverflowException();
+                    throw new MaxTriesException();
                 }
 
                 var data = readLineAsList();
