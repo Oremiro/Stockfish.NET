@@ -81,15 +81,6 @@ namespace Stockfish.NET
             _stockfish.Wait(estimatedTime);
         }
 
-        private void setOption(string name, int value)
-        {
-            send($"setoption name {name} value {value}");
-            if (!isReady())
-            {
-                throw new ApplicationException();
-            }
-        }
-
         private bool isReady()
         {
             send("isready");
@@ -109,6 +100,15 @@ namespace Stockfish.NET
                 return false;
             }
         }
+        
+        private void setOption(string name, int value)
+        {
+            send($"setoption name {name} value {value}");
+            if (!isReady())
+            {
+                throw new ApplicationException();
+            }
+        }
 
         private void startNewGame()
         {
@@ -119,6 +119,15 @@ namespace Stockfish.NET
             }
         }
 
+        private void go()
+        {
+            send($"go depth {Depth}");
+        }
+
+        private void goTime(int time)
+        {
+            send($"go movetime {time}");
+        }
 
         private List<string> readLineAsList()
         {
@@ -166,12 +175,6 @@ namespace Stockfish.NET
             startNewGame();
             send($"position fen {fenPosition}");
         }
-
-        public string SetSkillLevel(int skillLevel = 20)
-        {
-            throw new System.NotImplementedException();
-        }
-
 
         public void GetBestMove()
         {
@@ -258,6 +261,8 @@ namespace Stockfish.NET
                 {
                     return evaluation;
                 }
+
+                tries++;
             }
         }
 
