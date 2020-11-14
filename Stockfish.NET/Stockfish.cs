@@ -191,7 +191,7 @@ namespace Stockfish.NET
                 if (data.Contains("+") || data.Contains("|"))
                 {
                     lines++;
-                    board += data;
+                    board += $"{data}\n";
                 }
 
                 tries++;
