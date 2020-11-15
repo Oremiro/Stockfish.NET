@@ -2,7 +2,7 @@
 <package >
   <metadata>
     <id>Stockfish.NET</id>
-    <version>1.0.5</version>
+    <version>1.0.7</version>
     <title>$title$</title>
     <authors>Yaroslav Bondarev (Oremiro)</authors>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
