@@ -23,6 +23,7 @@ namespace Stockfish.NET
         /// <param name="path">Path to usable binary file from stockfish site</param>
         public StockfishProcess(string path)
         {
+            //TODO: need add method which should be depended on os version
             _processStartInfo = new ProcessStartInfo
             {
                 FileName = path,
