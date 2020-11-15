@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using Stockfish.NET.Exceptions;
 using Stockfish.NET.Models;
-namespace Stockfish.NET
+
+namespace Stockfish.NET.Core
 {
     public class Stockfish : IStockfish
     {

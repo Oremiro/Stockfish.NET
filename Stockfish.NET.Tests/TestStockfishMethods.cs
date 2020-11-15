@@ -15,7 +15,7 @@ namespace Stockfish.NET.Tests
         public TestStockfishMethods(ITestOutputHelper testOutputHelper)
         {
             var path = Utils.GetStockfishDir();
-            Stockfish = new Stockfish(path, depth: 2);
+            Stockfish = new Core.Stockfish(path, depth: 2);
         }
 
         [Fact(Timeout = 2000)]
