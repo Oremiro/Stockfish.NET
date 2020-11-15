@@ -26,7 +26,7 @@ namespace Stockfish.NET
             _processStartInfo = new ProcessStartInfo
             {
                 FileName = path,
-                UseShellExecute = true,
+                UseShellExecute = false,
                 RedirectStandardError = true,
                 RedirectStandardInput = true,
                 RedirectStandardOutput = true
