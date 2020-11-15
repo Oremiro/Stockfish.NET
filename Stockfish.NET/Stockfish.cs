@@ -86,9 +86,8 @@ namespace Stockfish.NET
                     .GetParent(Directory.GetParent(Directory.GetParent(Directory.GetCurrentDirectory()).ToString())
                         .ToString()).ToString());
                 Console.WriteLine(dir);
-                path = $@"{dir}/Stockfish.NET/Stockfish/win/stockfish_12_win_x64/stockfish_12_win_x64.exe";
+                path = $@"{dir}\Stockfish.NET\Stockfish\win\stockfish_12_win_x64\stockfish_20090216_x64.exe";
             }
-
             Depth = depth;
             _stockfish = new StockfishProcess(path);
             _stockfish.Start();
