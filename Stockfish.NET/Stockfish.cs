@@ -4,7 +4,6 @@ using System.IO;
 using System.Linq;
 using Stockfish.NET.Exceptions;
 using Stockfish.NET.Models;
-
 namespace Stockfish.NET
 {
     public class Stockfish : IStockfish
@@ -69,25 +68,10 @@ namespace Stockfish.NET
         /// <param name="depth"></param>
         /// <param name="settings"></param>
         public Stockfish(
-            string path =
-                "default",
+            string path,
             int depth = 2,
             Settings settings = null)
         {
-            if (path == "default")
-            {
-                //.\netcoreapp
-                //.\Debug
-                //.\bin
-                //.\Stockfish.NET.Tests
-                // looks very ugly? should be changed?
-                
-                var dir = Directory.GetParent(Directory
-                    .GetParent(Directory.GetParent(Directory.GetParent(Directory.GetCurrentDirectory()).ToString())
-                        .ToString()).ToString());
-                Console.WriteLine(dir);
-                path = $@"{dir}\Stockfish.NET\Stockfish\win\stockfish_12_win_x64\stockfish_20090216_x64.exe";
-            }
             Depth = depth;
             _stockfish = new StockfishProcess(path);
             _stockfish.Start();

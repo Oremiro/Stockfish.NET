@@ -10,13 +10,12 @@ namespace Stockfish.NET.Tests
 {
     public class TestStockfishMethods
     {
-        private readonly ITestOutputHelper _testOutputHelper;
         private IStockfish Stockfish { get; set; }
 
         public TestStockfishMethods(ITestOutputHelper testOutputHelper)
         {
-            _testOutputHelper = testOutputHelper;
-            Stockfish = new Stockfish(depth: 2);
+            var path = Utils.GetStockfishDir();
+            Stockfish = new Stockfish(path, depth: 2);
         }
 
         [Fact(Timeout = 2000)]
@@ -77,7 +76,6 @@ namespace Stockfish.NET.Tests
         [Fact(Timeout = 2000)]
         public void TestGetBestMoveMate()
         {
-            _testOutputHelper.WriteLine(Directory.GetCurrentDirectory());
             Stockfish.SetPosition(
                 "f2f3", "e7e5", "g2g4", "d8h4"
             );
