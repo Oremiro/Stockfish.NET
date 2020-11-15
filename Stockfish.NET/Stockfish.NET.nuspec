@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<package >
+  <metadata>
+    <id>Stockfish.NET</id>
+    <version>1.0.0-beta</version>
+    <title>$title$</title>
+    <authors>Yaroslav Bondarev (Oremiro)</authors>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <license type="expression">MIT</license>
+    <projectUrl>https://github.com/Oremiro/Stockfish.NET/</projectUrl>
+    <description>Interloop with Stockfish chess engine in c# language on .net platform.</description>
+    <releaseNotes>Interloop with Stockfish chess engine in c# language on .net platform.</releaseNotes>
+    <copyright>$copyright$</copyright>
+    <tags>ChessEngine Stockfish</tags>
+  </metadata>
+</package>

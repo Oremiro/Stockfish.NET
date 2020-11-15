@@ -2,6 +2,8 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
+    <AssemblyName>Stockfish.NET</AssemblyName>
+    <RootNamespace>Stockfish.NET</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>
