@@ -115,26 +115,19 @@ namespace Stockfish.NET.Core
         /// </summary>
         /// <returns></returns>
         /// <exception cref="MaxTriesException"></exception>
-        private bool isReady()
+		private bool isReady()
         {
-            send("isready");
-            var tries = 0;
-            while (true)
-            {
-                if (tries > MAX_TRIES)
-                {
-                    throw new MaxTriesException();
-                }
+			send("isready");
+			var tries = 0;
+			while (tries < MAX_TRIES) {
+				++tries;
 
-                var data = _stockfish.ReadLine();
-                if (data == "readyok")
-                {
-                    return true;
-                }
-
-                return false;
-            }
-        }
+				if (_stockfish.ReadLine() == "readyok") {
+					return true;
+				}
+			}
+			throw new MaxTriesException();
+		}
 
         /// <summary>
         /// 
