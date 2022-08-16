@@ -191,7 +191,7 @@ namespace Stockfish.NET.Core
         private List<string> readLineAsList()
         {
             var data = _stockfish.ReadLine();
-            return data.Split(" ").ToList();
+            return data.Split(' ').ToList();
         }
 
         #endregion
@@ -397,7 +397,7 @@ namespace Stockfish.NET.Core
             {
                 if (tries > MAX_TRIES)
                 {
-                    throw new MaxTriesException();
+                    throw new MaxTriesException("tries:"+tries+">max-tries:"+MAX_TRIES);
                 }
 
                 var data = readLineAsList();

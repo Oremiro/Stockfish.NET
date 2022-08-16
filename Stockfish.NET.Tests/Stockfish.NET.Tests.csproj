@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <TargetFrameworks>net5.0;net471</TargetFrameworks>
 
     <IsPackable>false</IsPackable>
   </PropertyGroup>
@@ -9,12 +9,19 @@
   <ItemGroup>
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.5.0" />
     <PackageReference Include="xunit" Version="2.4.0" />
-    <PackageReference Include="xunit.runner.visualstudio" Version="2.4.0" />
+	  <!--    <PackageReference Include="xunit.abstractions" Version="2.0.3"/> !-->
+    <PackageReference Include="xunit.runner.visualstudio" Version="2.4.3"/>
     <PackageReference Include="coverlet.collector" Version="1.2.0" />
+    <!-- fix for: https://github.com/tpierrain/NFluent/issues/274 !-->
+    <PackageReference Include="Microsoft.TestPlatform.ObjectModel" Version="16.5.0" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\Stockfish.NET\Stockfish.NET.csproj" />
   </ItemGroup>
+
+  <PropertyGroup>
+	  <DebugType>Full</DebugType>
+  </PropertyGroup>
 
 </Project>
