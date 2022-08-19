@@ -16,7 +16,15 @@ namespace Stockfish.NET.Tests
                 .GetParent(Directory.GetParent(Directory.GetParent(location).ToString())
                     .ToString()).ToString()).ToString());
             Console.WriteLine(dir);
-            var path = $@"{dir}\Stockfish.NET.Tests\Stockfish\win\stockfish_12_win_x64\stockfish_20090216_x64.exe";
+            string path = null;
+            if (System.Runtime.InteropServices.RuntimeInformation.IsOSPlatform( System.Runtime.InteropServices.OSPlatform.Windows))
+            {
+                 path = $@"{dir}\Stockfish.NET.Tests\Stockfish\win\stockfish_12_win_x64\stockfish_20090216_x64.exe";
+            }
+            else
+            {
+                path = "/usr/games/stockfish";
+            }
             return path;
         }
     }
